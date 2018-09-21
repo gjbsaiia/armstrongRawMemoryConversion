@@ -7,7 +7,7 @@ used for testing at Marturion Ltd.</br>
 ** apologies for how gross this code looks</br>
     it was written quickly, and written to work. definintely not my best, or most elegant, work.</br>
     however I am proud of how well it works, and the complexity of the problem it solved.</br>
-</br
+</br>
 ## instructions:
     - print how 150 bytes from address 0x003000 into log file through serial port using technical menu to a log file
     - label this log file with a name that captures the state of the Armstrong device, this name will be used throughout
