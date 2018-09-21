@@ -91,7 +91,7 @@ def main():
 	command = raw_input("print to text file? (y/n) ")
 	if(command == "y"):
 		splitted = logPath.split(".")
-		convertLog = splitted[0]+"Converted.txt"
+		convertLog = splitted[0]+"Converted.csv"
 	else:
 		convertLog = ""
 	printConverted(convertLog)
@@ -382,9 +382,8 @@ def printConverted(convertLog):
 			splitted2 = splitted[len(splitted)-1].split(".")
 			name = splitted2[0]
 		with open(convertLog, "w+") as file:
-			file.write("------------------------------------------------------------\n")
-			file.write("Flash Dump: UI_t ---> "+name+"\n")
-			file.write("------------------------------------------------------------\n")
+			file.write("Flash Dump,UI_t,"+name+"\n")
+			file.write("\n")
 		file.close()
 		flag = True
 	else:
@@ -399,7 +398,7 @@ def printConverted(convertLog):
 			if(flag):
 				with open(convertLog, "a+") as file:
 					file.write("\n")
-					file.write(attrib[2]+":"+"\n")
+					file.write(attrib[2]+"\n")
 				file.close()
 			i += 1
 			i = printStruct(attrib[1], i, attrib[0], struct, convertLog, flag)
@@ -413,7 +412,7 @@ def printConverted(convertLog):
 			print(attrib[2]+": "+str(attrib[1]))
 			if(flag):
 				with open(convertLog, "a+") as file:
-					file.write(attrib[2]+": "+str(attrib[1])+"\n")
+					file.write(attrib[2]+","+str(attrib[1])+"\n")
 				file.close()
 			i += 1
 
@@ -431,7 +430,7 @@ def printStruct(struct, i, limit, id, convertLog, flag):
 				print("   "+data[2]+": "+str(data[1]))
 				if(flag):
 					with open(convertLog, "a+") as file:
-						file.write("   "+data[2]+": "+str(data[1])+"\n")
+						file.write(" ,"+data[2]+","+str(data[1])+"\n")
 					file.close()
 				limit -= data[0]
 				i += 1
@@ -448,7 +447,7 @@ def printStruct(struct, i, limit, id, convertLog, flag):
 				print("   "+data[2]+": "+str(data[1]))
 				if(flag):
 					with open(convertLog, "a+") as file:
-						file.write("   "+data[2]+": "+str(data[1])+"\n")
+						file.write(" ,"+data[2]+","+str(data[1])+"\n")
 					file.close()
 				limit -= data[0]
 				i += 1
@@ -467,7 +466,7 @@ def printStruct(struct, i, limit, id, convertLog, flag):
 				print("   "+data[2]+": "+str(data[1]))
 				if(flag):
 					with open(convertLog, "a+") as file:
-						file.write("   "+data[2]+": "+str(data[1])+"\n")
+						file.write(" ,"+data[2]+","+str(data[1])+"\n")
 					file.close()
 				limit -= data[0]
 				i += 1
