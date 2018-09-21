@@ -88,7 +88,7 @@ def main():
 	command = raw_input("convert from hex to decimal? (y/n) ")
 	if(command == "y"):
 		convertFromHex()
-	command = raw_input("print to text file? (y/n) ")
+	command = raw_input("print to .csv file? (y/n) ")
 	if(command == "y"):
 		splitted = logPath.split(".")
 		convertLog = splitted[0]+"Converted.csv"
