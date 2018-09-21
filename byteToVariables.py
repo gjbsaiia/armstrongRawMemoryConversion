@@ -85,7 +85,9 @@ def main():
 			print("couldn't find file. please try again.")
 			print("-------------------------------------------------")
 	extractData(data)
-	convertFromHex()
+	command = raw_input("convert from hex to decimal? (y/n) ")
+	if(command == "y"):
+		convertFromHex()
 	command = raw_input("print to text file? (y/n) ")
 	if(command == "y"):
 		splitted = logPath.split(".")
@@ -371,10 +373,17 @@ def printConverted(convertLog):
 	print("------------------------------------------------------------")
 	flag = False
 	if(convertLog != ""):
-		splitted = convertLog.split(".")
+		name = ""
+		splitted = convertLog.split("/")
+		if(len(splitted) < 2):
+			splitted2 = convertLog.split(".")
+			name = splitted2[0]
+		else:
+			splitted2 = splitted[len(splitted)-1].split(".")
+			name = splitted2[0]
 		with open(convertLog, "w+") as file:
 			file.write("------------------------------------------------------------\n")
-			file.write("Flash Dump: UI_t ---> "+splitted[0]+"\n")
+			file.write("Flash Dump: UI_t ---> "+name+"\n")
 			file.write("------------------------------------------------------------\n")
 		file.close()
 		flag = True
