@@ -75,12 +75,25 @@ def main():
 	print("-------------------------------------------------")
 	print("flash dump byte array converter")
 	print("-------------------------------------------------")
-	logPath = raw_input("Enter log file name: ")
-	print("-------------------------------------------------")
-	data = getContents(logPath)
+	while(1):
+		try:
+			logPath = raw_input("Enter log file name: ")
+			print("-------------------------------------------------")
+			data = getContents(logPath)
+			break
+		except IOError:
+			print("couldn't find file. please try again.")
+			print("-------------------------------------------------")
 	extractData(data)
 	convertFromHex()
-	printConverted()
+	command = raw_input("print to text file? (y/n) ")
+	if(command == "y"):
+		splitted = logPath.split(".")
+		convertLog = splitted[0]+"Converted.txt"
+	else:
+		convertLog = ""
+	printConverted(convertLog)
+
 
 # dictionary that indexs each struct with byte size, value, and description
 dic = {1 : [1, UI_struct.valid, "valid"],
@@ -350,11 +363,23 @@ def convertStructData(i, limit, id):
 			sliderDic[i][1] = int(sliderDic[i][1], 16)
 			i += 1
 		return i
+
 # function to print out UI_t struct
-def printConverted():
+def printConverted(convertLog):
 	print("------------------------------------------------------------")
 	print("Flash Dump:UI_t")
 	print("------------------------------------------------------------")
+	flag = False
+	if(convertLog != ""):
+		splitted = convertLog.split(".")
+		with open(convertLog, "w+") as file:
+			file.write("------------------------------------------------------------\n")
+			file.write("Flash Dump: UI_t ---> "+splitted[0]+"\n")
+			file.write("------------------------------------------------------------\n")
+		file.close()
+		flag = True
+	else:
+		flag = False
 	i = 1
 	struct = 0
 	while( i < 111 ):
@@ -362,16 +387,29 @@ def printConverted():
 		if( len(attrib) > 3 ):
 			print("")
 			print(attrib[2]+":")
+			if(flag):
+				with open(convertLog, "a+") as file:
+					file.write("\n")
+					file.write(attrib[2]+":"+"\n")
+				file.close()
 			i += 1
-			i = printStruct(attrib[1], i, attrib[0], struct)
+			i = printStruct(attrib[1], i, attrib[0], struct, convertLog, flag)
 			struct += 1
 			print""
+			if(flag):
+				with open(convertLog, "a+") as file:
+					file.write("\n")
+				file.close()
 		else:
 			print(attrib[2]+": "+str(attrib[1]))
+			if(flag):
+				with open(convertLog, "a+") as file:
+					file.write(attrib[2]+": "+str(attrib[1])+"\n")
+				file.close()
 			i += 1
 
 # helper function to print elements in sub structs
-def printStruct(struct, i, limit, id):
+def printStruct(struct, i, limit, id, convertLog, flag):
 	data = []
 	if(id == 0):
 		while(limit > 0):
@@ -382,6 +420,10 @@ def printStruct(struct, i, limit, id):
 				i = printStruct(data[1], i, data[0])
 			else:
 				print("   "+data[2]+": "+str(data[1]))
+				if(flag):
+					with open(convertLog, "a+") as file:
+						file.write("   "+data[2]+": "+str(data[1])+"\n")
+					file.close()
 				limit -= data[0]
 				i += 1
 		return i
@@ -395,6 +437,10 @@ def printStruct(struct, i, limit, id):
 				i = printStruct(data[1], i, data[0])
 			else:
 				print("   "+data[2]+": "+str(data[1]))
+				if(flag):
+					with open(convertLog, "a+") as file:
+						file.write("   "+data[2]+": "+str(data[1])+"\n")
+					file.close()
 				limit -= data[0]
 				i += 1
 			if(id == 1 and j == 2):
@@ -410,9 +456,14 @@ def printStruct(struct, i, limit, id):
 				i = printStruct(data[1], i, data[0])
 			else:
 				print("   "+data[2]+": "+str(data[1]))
+				if(flag):
+					with open(convertLog, "a+") as file:
+						file.write("   "+data[2]+": "+str(data[1])+"\n")
+					file.close()
 				limit -= data[0]
 				i += 1
 		return i
+
 
 #simple little function to check if string is number
 def isSpace(value):
